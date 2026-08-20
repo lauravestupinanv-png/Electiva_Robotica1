@@ -1,29 +1,67 @@
-#1C Gráfica de una PT100
+# C1. GRAFICA DE UNA PT100
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Parámetros de la PT100
+# Datos de la PT100
 R0 = 100
+
 A = 3.9083e-3
 B = -5.775e-7
+C = -4.183e-12
 
-# Rango de temperatura
+# Temperatura desde -200 °C hasta 200 °C
 temperaturas = np.linspace(-200, 200, 401)
 
-# Calcular la resistencia
-resistencias = R0 * (1 + A * temperaturas + B * temperaturas**2)
+# Lista para guardar las resistencias
+resistencias = []
 
-# Crear la gráfica
-plt.plot(temperaturas, resistencias)
+# Calcular la resistencia para cada temperatura
+for T in temperaturas:
 
-# Títulos y etiquetas
-plt.title("Comportamiento de una PT100")
-plt.xlabel("Temperatura (°C)")
-plt.ylabel("Resistencia (Ω)")
+    # Primera ecuación: T >= 0 °C
+    if T >= 0:
 
-# Cuadrícula
+        R = R0 * (
+            1
+            + A * T
+            + B * T**2
+        )
+
+    # Segunda ecuación: T < 0 °C
+    else:
+
+        R = R0 * (
+            1
+            + A * T
+            + B * T**2
+            + C * (T - 100) * T**3
+        )
+
+    resistencias.append(R)
+
+
+# GRAFICA
+
+plt.figure()
+
+plt.plot(
+    temperaturas,
+    resistencias
+)
+
+plt.title(
+    "Comportamiento de una PT100"
+)
+
+plt.xlabel(
+    "Temperatura (°C)"
+)
+
+plt.ylabel(
+    "Resistencia (Ω)"
+)
+
 plt.grid(True)
 
-# Mostrar gráfica
 plt.show()
